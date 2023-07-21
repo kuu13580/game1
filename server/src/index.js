@@ -1,23 +1,20 @@
 import express from "express";
-import * as bodyParser from "body-parser";
+import { Server } from "socket.io";
+import http from "http";
 
 const app = express();
-const router = express.Router();
+const server = http.Server(app);
+const io = new Server(server);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+const PORT = 3000;
 
-router.get(
-  "/",
-  async (req, res) => {
-    res.send("hello world");
-  }
-);
-
-app.use("/", router);
-
-app.listen(3000, () => {
-  console.log("listening on port 3000");
+server.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
 });
 
-export default app;
+io.on("connection", (socket) => {
+  console.log("user connected");
+  socket.on("send message", (message) => {
+    console.log(message);
+  });
+});
