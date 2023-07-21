@@ -3,18 +3,21 @@ import { Server } from "socket.io";
 import http from "http";
 
 const app = express();
-const server = http.Server(app);
-const io = new Server(server);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost"
+  }
+});
+
 
 const PORT = 3000;
 
-server.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
+io.on("connection", (socket) => {
+  // send a message to the client
+  socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
 });
 
-io.on("connection", (socket) => {
-  console.log("user connected");
-  socket.on("send message", (message) => {
-    console.log(message);
-  });
+server.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
 });

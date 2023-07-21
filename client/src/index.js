@@ -15,3 +15,13 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+import { io } from "socket.io-client";
+
+const socket = io("localhost:3000");
+
+// receive a message from the server
+socket.on("hello from server", (...args) => {
+  console.log(args);
+});
+
