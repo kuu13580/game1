@@ -1,0 +1,4 @@
+SampleFile パスカルケース
+sampleFile キャメルケース
+sample-file ケバブケース
+sample_file スネークケース
