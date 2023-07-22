@@ -4,7 +4,7 @@ export class Example extends Phaser.Scene
 {
     constructor ()
     {
-        super();
+        super({key: 'Example'});
     }
 
     preload ()
