@@ -1,6 +1,5 @@
 const D_WIDTH = 800;
 const D_HEIGHT = 600;
-
 import "phaser";
 import { Input } from "phaser";
 
