@@ -1,5 +1,5 @@
 import "phaser";
-import { Example } from "./scenes/Example";
+import { Example, Field, PlayerSelect } from "./scenes/Example";
 import { Title } from "./scenes/Title";
 import CNetworkClient from "./NetworkClient";
 
@@ -13,7 +13,7 @@ const config = {
           gravity: { y: 200 }
       }
   },
-  scene: [Title, Example]
+  scene: [Field, Title, PlayerSelect, Example]
 };
 
 const game = new Phaser.Game(config);
