@@ -2,22 +2,33 @@ import express from "express";
 import { Server } from "socket.io";
 import http from "http";
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://127.0.0.1"
-  }
-});
-
-
 const PORT = 3000;
 
-io.on("connection", (socket) => {
-  // send a message to the client
-  socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
-});
+class CServer {
+  constructor() {
+    this.app = express();
+    this.server = http.createServer(this.app);
+    this.io = new Server(this.server, {
+      cors: {
+        origin: "http://127.0.0.1"
+      }
+    });
+  }
 
-server.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
-});
+  setup() {
+    this.io.on("connection", (socket) => {
+      // send a message to the client
+      socket.emit("first", "connect");
+    });
+  }
+
+  start () {
+    this.server.listen(PORT, () => {
+      console.log(`listening on port ${PORT}`);
+    });
+  }
+}
+
+const server = new CServer();
+server.setup();
+server.start();

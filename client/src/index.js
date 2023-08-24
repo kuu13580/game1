@@ -1,6 +1,7 @@
 import "phaser";
 import { Example } from "./scenes/Example";
 import { Title } from "./scenes/Title";
+import CNetworkClient from "./NetworkClient";
 
 const config = {
   type: Phaser.AUTO,
@@ -17,13 +18,7 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-
-import { io } from "socket.io-client";
-
-const socket = io("localhost:3000");
-
-// receive a message from the server
-socket.on("hello from server", (...args) => {
-  console.log(args);
+const network = new CNetworkClient("localhost:3000");
+network.receive("first").then((res) => {
+  console.log(res);
 });
-
