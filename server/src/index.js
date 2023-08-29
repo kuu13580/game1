@@ -48,7 +48,6 @@ class CServer {
       id: roomId,
       users: [user],
       turnUserIndex: 0,
-      posts: [],
     };
     this.rooms.push(room);
     socket.join(roomId);
@@ -66,11 +65,11 @@ class CServer {
       this.io.to(socket.id).emit("notifyError", "部屋が見つかりません");
       return;
     }
-    const user = { id: socket.id, name: userName, roomId: roomId };
+    const user = { id: socket.id, name: userName, roomId: Number(roomId) };
     this.rooms[roomIndex].users.push(user);
     socket.join(this.rooms[roomIndex].id);
     this.io.to(socket.id).emit("updateRoom", this.rooms[roomIndex]);
-    console.log("room", this.rooms[roomIndex], "entered");
+    console.log("room", this.rooms, "entered");
   }
 
   generateRoomId() {
