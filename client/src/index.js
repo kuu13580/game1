@@ -25,3 +25,8 @@ network.receive("first").then((res) => {
 });
 // 作成
 network.send("create", "user1");
+function debug() {
+  network.send("enter", "user2", document.getElementById("input").value);
+  console.log("debug");
+}
+document.getElementById("btn").addEventListener("click", debug);
