@@ -15,14 +15,14 @@ class CServer {
     });
   }
 
-  setup() {
+  start() {
     this.io.on("connection", (socket) => {
       // send a message to the client
       socket.emit("first", "connect");
     });
   }
 
-  start () {
+  setup() {
     this.server.listen(PORT, () => {
       console.log(`listening on port ${PORT}`);
     });
