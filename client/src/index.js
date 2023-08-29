@@ -1,5 +1,6 @@
 import "phaser";
-import { Example, Field, PlayerSelect } from "./scenes/Example";
+import { Example, PlayerSelect } from "./scenes/Example";
+import { Field } from "./scenes/Field"
 import { Title } from "./scenes/Title";
 import CNetworkClient from "./NetworkClient";
 
