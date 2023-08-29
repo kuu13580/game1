@@ -43,7 +43,7 @@ class CServer {
       return;
     }
     const roomId = this.generateRoomId();
-    const user = { id: socket.id, name: userName, room: roomId };
+    const user = { id: socket.id, name: userName, roomId: roomId };
     const room = {
       id: roomId,
       users: [user],
@@ -66,10 +66,10 @@ class CServer {
       this.io.to(socket.id).emit("notifyError", "部屋が見つかりません");
       return;
     }
-    const user = { id: socket.id, name: userName, room: roomId };
+    const user = { id: socket.id, name: userName, roomId: roomId };
     this.rooms[roomIndex].users.push(user);
-    socket.join(rooms[roomIndex].id);
-    this.io.to(socket.id).emit("updateRoom", rooms[roomIndex]);
+    socket.join(this.rooms[roomIndex].id);
+    this.io.to(socket.id).emit("updateRoom", this.rooms[roomIndex]);
     console.log("room", this.rooms[roomIndex], "entered");
   }
 
