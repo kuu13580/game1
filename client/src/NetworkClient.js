@@ -6,8 +6,8 @@ export default class CNetworkClient {
     console.log("network constructor");
   }
   
-  send(identifier, data) {
-    this.socket.emit(identifier, data);
+  send(identifier, ...data) {
+    this.socket.emit(identifier, ...data);
   }
 
   receive(identifier) {
