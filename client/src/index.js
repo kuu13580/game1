@@ -3,6 +3,7 @@ import { Example, PlayerSelect } from "./scenes/Example";
 import { Field } from "./scenes/Field"
 import { Title } from "./scenes/Title";
 import CNetworkClient from "./NetworkClient";
+イラガ
 
 const config = {
   type: Phaser.AUTO,
