@@ -42,7 +42,7 @@ class CServer {
       this.io.to(socket.id).emit("notifyError", "名前を入力してください");
       return;
     }
-    const roomId = generateRoomId();
+    const roomId = this.generateRoomId();
     const user = { id: socket.id, name: userName, room: roomId };
     const room = {
       id: roomId,
@@ -72,16 +72,17 @@ class CServer {
     this.io.to(socket.id).emit("updateRoom", rooms[roomIndex]);
     console.log("room", this.rooms[roomIndex], "entered");
   }
+
+  generateRoomId() {
+    const id = Math.floor(Math.random() * 8999 + 1000);
+    if (this.rooms.some((r) => r.id == id)) {
+      // ランダムに生成したidが既に存在する場合は作り直す
+      return generateRoomId();
+    }
+    return id;
+  }
 }
 
-function generateRoomId() {
-  const id = Math.floor(Math.random() * 8999 + 1000);
-  if (rooms.some((r) => r.id == id)) {
-    // ランダムに生成したidが既に存在する場合は作り直す
-    return generateRoomId();
-  }
-  return id;
-}
 
 const server = new CServer();
 server.setup();

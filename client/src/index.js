@@ -23,3 +23,5 @@ const network = new CNetworkClient("localhost:3000");
 network.receive("first").then((res) => {
   console.log(res);
 });
+// 作成
+network.send("create", "user1");
