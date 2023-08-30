@@ -1,4 +1,5 @@
 // バトルフィールド共通
+const SQRT3 = Math.sqrt(3);
 export class Field extends Phaser.Scene {
     constructor (){
         super({ key: 'Field' }

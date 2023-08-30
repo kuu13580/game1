@@ -1,7 +1,5 @@
 import "phaser";
 
-const SQRT3 = Math.sqrt(3);
-
 export class Example extends Phaser.Scene
 {
     constructor ()
