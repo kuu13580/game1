@@ -1,12 +1,14 @@
 import express from "express";
 import { Server } from "socket.io";
 import http from "http";
+import { disconnect } from "process";
 
 const PORT = 3000;
 
 class CServer {
   constructor() {
     this.rooms = [];
+    this.users = [];
     this.app = express();
     this.server = http.createServer(this.app);
     this.io = new Server(this.server, {
@@ -27,6 +29,10 @@ class CServer {
       // 部屋に入室する
       socket.on("enter", (userName, roomId) => {
         this.enter(socket, userName, roomId);
+      });
+      // 接続切断時
+      socket.on("disconnect", () => {
+        this.disconnect(socket);
       });
     });
   }
@@ -50,6 +56,7 @@ class CServer {
       turnUserIndex: 0,
     };
     this.rooms.push(room);
+    this.users.push(user);
     socket.join(roomId);
     this.io.to(socket.id).emit("updateRoom", room);
     console.log("room", this.rooms, "created");
@@ -67,6 +74,7 @@ class CServer {
     }
     const user = { id: socket.id, name: userName, roomId: Number(roomId) };
     this.rooms[roomIndex].users.push(user);
+    this.users.push(user);
     socket.join(this.rooms[roomIndex].id);
     this.io.to(socket.id).emit("updateRoom", this.rooms[roomIndex]);
     console.log("room", this.rooms, "entered");
@@ -79,6 +87,26 @@ class CServer {
       return generateRoomId();
     }
     return id;
+  }
+
+  disconnect(socket) {
+    const user = this.users.find((u) => u.id == socket.id);
+    if (!user) return;
+    const roomIndex = this.rooms.findIndex((r) => r.id == user.roomId);
+    if (roomIndex == -1) return;
+    const room = this.rooms[roomIndex];
+    const userIndexInRoom = room.users.findIndex((u) => u.id == socket.id);
+    if (userIndexInRoom == -1) return;
+    // ユーザーを削除
+    room.users.splice(userIndexInRoom, 1);
+    // ルームに誰もいなくなったら削除
+    if (room.users.length == 0) {
+      this.rooms.splice(roomIndex, 1);
+    } else {
+      // ルームのユーザーに変更を通知
+      this.io.to(room.id).emit("updateRoom", room);
+    }
+    console.log("disconnected\nuser", user, "\nroom", room);
   }
 }
 
