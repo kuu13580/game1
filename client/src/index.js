@@ -28,8 +28,14 @@ function debug() {
   const value = document.getElementById("input").value;
   if (value == "") {
     network.send("create", "user1");
+    network.receive("updateRoom").then((room) => {
+      document.getElementById("output").innerText = "created: " + room.id;
+    });
   } else {
     network.send("enter", "user2", value);
+    network.receive("updateRoom").then((room) => {
+      document.getElementById("output").innerText = "joined: " + room.id;
+    });
   }
   console.log("debug");
 }
