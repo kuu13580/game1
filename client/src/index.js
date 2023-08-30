@@ -35,5 +35,6 @@ function debug() {
     });
   }
   console.log("debug");
+  document.getElementById("input").setAttribute("disabled", true);
 }
 document.getElementById("btn").addEventListener("click", debug);
