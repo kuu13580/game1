@@ -20,9 +20,6 @@ const config = {
 const game = new Phaser.Game(config);
 
 const network = new CNetworkClient("localhost:3000");
-network.receive("first").then((res) => {
-  console.log(res);
-});
 // 作成
 function debug() {
   const value = document.getElementById("input").value;

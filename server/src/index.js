@@ -20,8 +20,6 @@ class CServer {
 
   start() {
     this.io.on("connection", (socket) => {
-      // send a message to the client
-      socket.emit("first", "connect");
       // 部屋作成
       socket.on("create", (userName) => {
         this.create(socket, userName);
