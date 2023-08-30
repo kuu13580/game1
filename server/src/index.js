@@ -59,7 +59,7 @@ class CServer {
     this.users.push(user);
     socket.join(roomId);
     this.io.to(socket.id).emit("updateRoom", room);
-    console.log("room", this.rooms, "created");
+    console.log("\ncreated\n", "rooms", this.rooms);
   }
 
   enter(socket, userName, roomId) {
@@ -77,7 +77,7 @@ class CServer {
     this.users.push(user);
     socket.join(this.rooms[roomIndex].id);
     this.io.to(socket.id).emit("updateRoom", this.rooms[roomIndex]);
-    console.log("room", this.rooms, "entered");
+    console.log("\nentered\n", "room", this.rooms[roomIndex]);
   }
 
   generateRoomId() {
@@ -106,7 +106,7 @@ class CServer {
       // ルームのユーザーに変更を通知
       this.io.to(room.id).emit("updateRoom", room);
     }
-    console.log("disconnected\nuser", user, "\nroom", room);
+    console.log("\ndisconnected\nuser", user, "\nroom", room);
   }
 }
 
