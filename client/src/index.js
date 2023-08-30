@@ -24,9 +24,13 @@ network.receive("first").then((res) => {
   console.log(res);
 });
 // 作成
-network.send("create", "user1");
 function debug() {
-  network.send("enter", "user2", document.getElementById("input").value);
+  const value = document.getElementById("input").value;
+  if (value == "") {
+    network.send("create", "user1");
+  } else {
+    network.send("enter", "user2", value);
+  }
   console.log("debug");
 }
 document.getElementById("btn").addEventListener("click", debug);
