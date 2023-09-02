@@ -32,5 +32,6 @@ function debug() {
     document.getElementById("password").setAttribute("disabled", true);
     document.getElementById("btn").setAttribute("disabled", true);
   });
+  console,log("debug");
 }
 document.getElementById("btn").addEventListener("click", debug);
