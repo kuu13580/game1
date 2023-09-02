@@ -20,14 +20,19 @@ class CServer {
 
   start() {
     this.io.on("connection", (socket) => {
-      // 部屋作成
-      socket.on("create", (userName) => {
-        this.create(socket, userName);
+      // 部屋作成・入室
+      socket.on("join", (userName, password) => {
+        if (userName == "") {
+          this.io.to(socket.id).emit("notifyError", "名前を入力してください");
+          return;
+        }
+        if (this.rooms.find((r) => r.password == password)) {
+          this.enter(socket, userName, password);
+        } else {
+          this.create(socket, userName, password);
+        }
       });
-      // 部屋に入室する
-      socket.on("enter", (userName, roomId) => {
-        this.enter(socket, userName, roomId);
-      });
+
       // 接続切断時
       socket.on("disconnect", () => {
         this.disconnect(socket);
@@ -41,17 +46,14 @@ class CServer {
     });
   }
 
-  create(socket, userName){
-    if (userName == "") {
-      this.io.to(socket.id).emit("notifyError", "名前を入力してください");
-      return;
-    }
+  create(socket, userName, password){
     const roomId = this.generateRoomId();
     const user = { id: socket.id, name: userName, roomId: roomId };
     const room = {
       id: roomId,
       users: [user],
       turnUserIndex: 0,
+      password: password,
     };
     this.rooms.push(room);
     this.users.push(user);
@@ -60,17 +62,13 @@ class CServer {
     console.log("\ncreated\n", "rooms", this.rooms);
   }
 
-  enter(socket, userName, roomId) {
-    if (userName == "") {
-      this.io.to(socket.id).emit("notifyError", "名前を入力してください");
-      return;
-    }
-    const roomIndex = this.rooms.findIndex((r) => r.id == roomId);
+  enter(socket, userName, password) {
+    const roomIndex = this.rooms.findIndex((r) => r.password == password);
     if (roomIndex == -1) {
       this.io.to(socket.id).emit("notifyError", "部屋が見つかりません");
       return;
     }
-    const user = { id: socket.id, name: userName, roomId: Number(roomId) };
+    const user = { id: socket.id, name: userName, roomId: this.rooms[roomIndex].id };
     this.rooms[roomIndex].users.push(user);
     this.users.push(user);
     socket.join(this.rooms[roomIndex].id);

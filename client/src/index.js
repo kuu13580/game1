@@ -22,19 +22,15 @@ const game = new Phaser.Game(config);
 const network = new CNetworkClient("localhost:3000");
 // 作成
 function debug() {
-  const value = document.getElementById("input").value;
-  if (value == "") {
-    network.send("create", "user1");
-    network.receive("updateRoom").then((room) => {
-      document.getElementById("output").innerText = "created: " + room.id;
-    });
-  } else {
-    network.send("enter", "user2", value);
-    network.receive("updateRoom").then((room) => {
-      document.getElementById("output").innerText = "joined: " + room.id;
-    });
-  }
-  console.log("debug");
-  document.getElementById("input").setAttribute("disabled", true);
+  const name = document.getElementById("name").value;
+  const password = document.getElementById("password").value;
+  if (!name || !password) return;
+  network.send("join", name, password);
+  network.receive("updateRoom").then((room) => {
+    document.getElementById("output").innerText = "joined";
+    document.getElementById("name").setAttribute("disabled", true);
+    document.getElementById("password").setAttribute("disabled", true);
+    document.getElementById("btn").setAttribute("disabled", true);
+  });
 }
 document.getElementById("btn").addEventListener("click", debug);
