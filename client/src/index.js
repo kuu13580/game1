@@ -26,12 +26,8 @@ function debug() {
   const password = document.getElementById("password").value;
   if (!name || !password) return;
   network.send("join", name, password);
-  network.receive("updateRoom").then((room) => {
-    document.getElementById("output").innerText = "joined";
-    document.getElementById("name").setAttribute("disabled", true);
-    document.getElementById("password").setAttribute("disabled", true);
-    document.getElementById("btn").setAttribute("disabled", true);
-  });
-  console,log("debug");
+  document.getElementById("name").setAttribute("disabled", true);
+  document.getElementById("password").setAttribute("disabled", true);
+  document.getElementById("btn").setAttribute("disabled", true);
 }
 document.getElementById("btn").addEventListener("click", debug);

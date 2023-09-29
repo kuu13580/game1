@@ -1,7 +1,6 @@
 import express from "express";
 import { Server } from "socket.io";
 import http from "http";
-import { disconnect } from "process";
 
 const PORT = 3000;
 
@@ -58,21 +57,18 @@ class CServer {
     this.rooms.push(room);
     this.users.push(user);
     socket.join(roomId);
-    this.io.to(socket.id).emit("updateRoom", room);
+    this.io.to(roomId).emit("updateRoom", room);
     console.log("\ncreated\n", "rooms", this.rooms);
   }
 
   enter(socket, userName, password) {
     const roomIndex = this.rooms.findIndex((r) => r.password == password);
-    if (roomIndex == -1) {
-      this.io.to(socket.id).emit("notifyError", "部屋が見つかりません");
-      return;
-    }
-    const user = { id: socket.id, name: userName, roomId: this.rooms[roomIndex].id };
+    const roomId = this.rooms[roomIndex].id;
+    const user = { id: socket.id, name: userName, roomId: roomId };
     this.rooms[roomIndex].users.push(user);
     this.users.push(user);
-    socket.join(this.rooms[roomIndex].id);
-    this.io.to(socket.id).emit("updateRoom", this.rooms[roomIndex]);
+    socket.join(roomId);
+    this.io.to(roomId).emit("updateRoom", this.rooms[roomIndex]);
     console.log("\nentered\n", "room", this.rooms[roomIndex]);
   }
 
